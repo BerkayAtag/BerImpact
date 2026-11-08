@@ -443,21 +443,6 @@
           "BerImpact.Domain": "[0.1.1, )"
         }
       }
-    },
-    "net10.0/win-x64": {
-      "System.Diagnostics.EventLog": {
-        "type": "Transitive",
-        "resolved": "10.0.1",
-        "contentHash": "xfaHEHVDkMOOZR5S6ZGezD0+vekdH1Nx/9Ih8/rOqOGSOk1fxiN3u94bYkBW/wigj0Uw2Wt3vvRj9mtYdgwEjw=="
-      },
-      "System.ServiceProcess.ServiceController": {
-        "type": "Transitive",
-        "resolved": "10.0.1",
-        "contentHash": "OFsr5p7rTqkke+JA3LL/qr11uJVWvf8MkbMuPbGX0KO7kDBHw3fWC36YaFWtbwUPBOvFhvrvSoHN95DfBRkzzQ==",
-        "dependencies": {
-          "System.Diagnostics.EventLog": "10.0.1"
-        }
-      }
     }
   }
 }

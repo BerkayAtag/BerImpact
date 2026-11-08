@@ -4,9 +4,9 @@ $root = Split-Path $PSScriptRoot -Parent
 Set-Location $root
 $destination = [IO.Path]::GetFullPath((Join-Path $root $Output))
 if (-not $destination.StartsWith($root + [IO.Path]::DirectorySeparatorChar, [StringComparison]::OrdinalIgnoreCase)) { throw 'Output must stay in workspace.' }
-dotnet publish src/backend/Api -c Release -r win-x64 --self-contained true -o "$destination/api"
+dotnet publish src/backend/Api -c Release -r win-x64 --self-contained true -p:NuGetLockFilePath=obj/packages.publish-win-x64.lock.json -o "$destination/api"
 if ($LASTEXITCODE -ne 0) { throw 'API publish failed.' }
-dotnet publish src/backend/Workers -c Release -r win-x64 --self-contained true -o "$destination/worker"
+dotnet publish src/backend/Workers -c Release -r win-x64 --self-contained true -p:NuGetLockFilePath=obj/packages.publish-win-x64.lock.json -o "$destination/worker"
 if ($LASTEXITCODE -ne 0) { throw 'Worker publish failed.' }
 Push-Location src/frontend
 npm ci

@@ -267,13 +267,6 @@
           "BerImpact.Domain": "[0.1.1, )"
         }
       }
-    },
-    "net10.0/win-x64": {
-      "System.ServiceProcess.ServiceController": {
-        "type": "Transitive",
-        "resolved": "10.0.1",
-        "contentHash": "OFsr5p7rTqkke+JA3LL/qr11uJVWvf8MkbMuPbGX0KO7kDBHw3fWC36YaFWtbwUPBOvFhvrvSoHN95DfBRkzzQ=="
-      }
     }
   }
 }

@@ -8,7 +8,7 @@
       "berimpact.sdk": {
         "type": "Project",
         "dependencies": {
-          "BerImpact.Domain": "[1.0.0, )"
+          "BerImpact.Domain": "[0.1.1, )"
         }
       }
     }

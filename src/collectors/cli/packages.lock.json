@@ -5,7 +5,7 @@
       "berimpact.connectors": {
         "type": "Project",
         "dependencies": {
-          "BerImpact.Sdk": "[1.0.0, )"
+          "BerImpact.Sdk": "[0.1.1, )"
         }
       },
       "berimpact.domain": {
@@ -14,7 +14,7 @@
       "berimpact.sdk": {
         "type": "Project",
         "dependencies": {
-          "BerImpact.Domain": "[1.0.0, )"
+          "BerImpact.Domain": "[0.1.1, )"
         }
       }
     }
