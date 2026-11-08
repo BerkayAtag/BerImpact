@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.1.1 — 2026-11-05
+## 0.1.1 — 2026-11-08
 
 - Fixed atomic import validation and conflicting observations at PostgreSQL timestamp precision.
 - Updated relationship evidence safely; older observations cannot replace newer evidence.
@@ -10,6 +10,7 @@
 - Hardened Zabbix health response validation and proxy recovery after API replacement.
 - Verified 29 unit/connector and 9 PostgreSQL integration tests, HTTPS worker smoke and browser workflows.
 - Added a concise screenshot-led GitHub page, CI and downloadable Windows/Linux packages.
+- Isolated Windows publish lock files so portable locked restore remains reproducible.
 
 
 ## 0.1.0 — 2026-11-05

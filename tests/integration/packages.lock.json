@@ -545,7 +545,7 @@
       "berimpact.api": {
         "type": "Project",
         "dependencies": {
-          "BerImpact.Infrastructure": "[1.0.0, )",
+          "BerImpact.Infrastructure": "[0.1.1, )",
           "Microsoft.AspNetCore.OpenApi": "[10.0.14, )",
           "Microsoft.Extensions.Hosting.WindowsServices": "[10.0.1, )"
         }
@@ -553,8 +553,8 @@
       "berimpact.application": {
         "type": "Project",
         "dependencies": {
-          "BerImpact.Domain": "[1.0.0, )",
-          "BerImpact.Sdk": "[1.0.0, )"
+          "BerImpact.Domain": "[0.1.1, )",
+          "BerImpact.Sdk": "[0.1.1, )"
         }
       },
       "berimpact.domain": {
@@ -563,7 +563,7 @@
       "berimpact.infrastructure": {
         "type": "Project",
         "dependencies": {
-          "BerImpact.Application": "[1.0.0, )",
+          "BerImpact.Application": "[0.1.1, )",
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "[10.0.14, )",
           "Npgsql.EntityFrameworkCore.PostgreSQL": "[10.0.3, )"
         }
@@ -571,7 +571,7 @@
       "berimpact.sdk": {
         "type": "Project",
         "dependencies": {
-          "BerImpact.Domain": "[1.0.0, )"
+          "BerImpact.Domain": "[0.1.1, )"
         }
       }
     }

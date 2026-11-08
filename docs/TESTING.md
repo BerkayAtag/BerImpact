@@ -1,4 +1,4 @@
-# Verification — 2026-11-05
+# Verification — 2026-11-08
 
 This is development-release evidence, not enterprise production certification.
 
@@ -41,3 +41,7 @@ Pending: real AD/GPO/SCCM/BigFix/Zabbix source acceptance, large-scale load test
 ## 0.1.1 browser regression checks
 
 IAB, 1440 × 1000, local Linux API: edited a test draft from v1 to v2; verified the historical-analysis warning; completed a new ruleset 1.2.0 job; downloaded CSV; submitted for review; compared two scenarios (2 versus 1 direct targets). Screenshots in site/assets use synthetic test records. API integration tests additionally cover null import entries, atomic timestamp conflicts, relationship refresh, immutable data partition, empty/duplicate target IDs and report encoding.
+
+## Release verification — 2026-11-08
+
+GitHub Actions [Verify run](https://github.com/BerkayAtag/BerImpact/actions/runs/42474095983) passed on Ubuntu and Windows runners: Linux unit/integration tests plus frontend build/lint; Windows unit tests. This adds native Windows test evidence, but does not certify Windows service installation. HTTPS Compose smoke was repeated successfully with ruleset 1.2.0. The live Pages site passed light/dark image loading, mobile overflow checks and browser console checks. Windows publishing now uses a separate runtime lock file and preserves portable restore locks. Release archives are checked against internal SHA-256 manifests and include no local credentials.
