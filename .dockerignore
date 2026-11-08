@@ -1,0 +1,9 @@
+**/bin
+**/obj
+**/node_modules
+**/dist
+.git
+.local
+artifacts
+docs/design
+src/backend/Api/wwwroot

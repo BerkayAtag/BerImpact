@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="BerImpact: kurum içi değişiklik etki analizi, kanıta dayalı risk ve senaryo karşılaştırması.">
+  <meta name="color-scheme" content="light dark">
+  <meta property="og:title" content="BerImpact — Değişiklikten önce, etkisini görün.">
+  <meta property="og:description" content="Envanteri inceleyin, etkiyi analiz edin, pilotunuzu planlayın. Veriler kendi ortamınızda kalır.">
+  <meta property="og:image" content="https://berkayatag.github.io/BerImpact/assets/dashboard.png">
+  <title>BerImpact — Değişiklikten önce, etkisini görün.</title>
+  <link rel="icon" type="image/svg+xml" href="assets/berimpact.svg">
+  <link rel="stylesheet" href="style.css">
+  <script src="theme.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">İçeriğe geç</a>
+<header class="top">
+  <a class="brand" href="#"><img src="assets/berimpact.svg" alt="" width="36" height="36"><span>BerImpact<small>by Berkay Atağ</small></span></a>
+  <nav aria-label="Ana menü"><a href="#ozellikler">Özellikler</a><a href="#ekranlar">Ekranlar</a><a href="#indir">İndir</a><a href="https://github.com/BerkayAtag/BerImpact">GitHub ↗</a></nav>
+  <button class="theme-toggle" id="theme-toggle" type="button" aria-pressed="false" aria-label="Karanlık temaya geç">
+    <svg class="icon-moon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M20.5 14.6A8.5 8.5 0 0 1 9.4 3.5a8.5 8.5 0 1 0 11.1 11.1Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+    <svg class="icon-sun" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l2 2m10 10 2 2M5 19l2-2M17 7l2-2" stroke="currentColor" stroke-width="1.8"/></svg>
+  </button>
+</header>
+<main id="main">
+  <section class="hero">
+    <div class="hero-copy">
+      <p class="eyebrow">0.1.1 · Ön sürüm · Observe Mode</p>
+      <h1>Değişiklikten önce,<br><em>etkisini görün.</em></h1>
+      <p class="lead">Envanterinizi inceleyin, bağımlılıkları takip edin ve değişiklik senaryolarını karşılaştırın. Riskin yanında dayanağını da görün.</p>
+      <div class="actions"><a class="button" href="#indir">Paketleri indir ↓</a><a class="link" href="https://github.com/BerkayAtag/BerImpact#readme">GitHub’da incele →</a></div>
+      <ul class="facts"><li>Kurum içinde</li><li>Kanıta dayalı</li><li>Altyapıya yazmaz</li></ul>
+    </div>
+    <figure class="hero-shot"><img src="assets/dashboard.png" data-light-src="assets/dashboard.png" data-dark-src="assets/dashboard-dark.png" alt="BerImpact genel bakış konsolu" width="1440" height="1000"><figcaption>Gerçek uygulama ekranı · canlı envanter başlangıçta boş</figcaption></figure>
+  </section>
+  <section id="ozellikler" class="section">
+    <div class="section-head"><h2>Önce analiz.<br><em>Sonra karar.</em></h2></div>
+    <div class="features">
+      <article><span class="num">01 / Envanter</span><h3>Kaynağı belli veri</h3><p>JSON aktarımı, kalıcı kaynak kimlikleri ve güncellik bilgisi. Test kayıtları canlı veriden ayrılır.</p></article>
+      <article><span class="num">02 / Etki</span><h3>Açıklanabilir risk</h3><p>Doğrudan ve dolaylı etkiler, bağımlılık yolları ve risk aralığı. Eksik kanıt gizlenmez.</p></article>
+      <article><span class="num">03 / Karar</span><h3>Senaryo ve pilot</h3><p>Aynı snapshot üzerinde kapsamları karşılaştırın. Pilot önerisini ve HTML, CSV, JSON raporlarını alın.</p></article>
+    </div>
+  </section>
+  <section id="ekranlar" class="section">
+    <div class="section-head"><h2>Sade konsol.<br><em>Görünür kanıt.</em></h2></div>
+    <div class="gallery">
+      <figure><img src="assets/inventory.png" data-light-src="assets/inventory.png" data-dark-src="assets/inventory-dark.png" alt="Test envanteri ve kayıtların kanıt durumları" loading="lazy" width="1440" height="1000"><figcaption>Envanter · sentetik test kayıtları</figcaption></figure>
+      <figure><img src="assets/analysis.png" data-light-src="assets/analysis.png" data-dark-src="assets/analysis-dark.png" alt="Gerçek worker sonucuyla iki hedef kapsamının karşılaştırması" loading="lazy" width="1440" height="1000"><figcaption>Simülasyon · risk aralığı ve kanıt güveni</figcaption></figure>
+    </div>
+  </section>
+  <section id="indir" class="section">
+    <div class="section-head"><h2>BerImpact 0.1.1</h2><p class="muted">Linux Docker offline paketi ve Windows x64 paketi. Kurulum adımları ve SHA-256 dosyası sürümle birlikte.</p></div>
+    <div class="downloads"><a class="button" href="https://github.com/BerkayAtag/BerImpact/releases/tag/v0.1.1">Sürüm ve indirmeler ↓</a><a class="button secondary" href="https://github.com/BerkayAtag/BerImpact/blob/main/docs/DEPLOYMENT.md">Kurulum rehberi</a><a class="link" href="https://github.com/BerkayAtag/BerImpact/blob/main/docs/CHANGELOG.md">Neler değişti? →</a></div>
+    <p class="note">Geliştirme ön sürümü. Altyapı dağıtımı kapalıdır. AD/GPO/SCCM/BigFix bağlantıları ve kurumsal ölçek kabul testleri henüz tamamlanmadı. Windows servis kurulumu ayrıca doğrulanmalıdır.</p>
+    <p class="note">GitHub Pages yalnız bu tanıtım sayfasını sunar. Uygulama ve envanter kendi sunucunuzda çalışır.</p>
+  </section>
+</main>
+<footer><span>© 2026 Berkay Atağ · BerImpact</span><a href="https://github.com/BerkayAtag/BerImpact">GitHub</a><a href="https://github.com/BerkayAtag/BerImpact/blob/main/docs/SECURITY.md">Güvenlik</a></footer>
+</body>
+</html>

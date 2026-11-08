@@ -1,0 +1,10 @@
+export interface User { id: string; username: string; roles: string[] }
+export interface Page<T> { items: T[]; total: number; page: number }
+export interface Asset { id: string; name: string; source: string; externalId: string; kind: string; os: string; model: string; location: string; critical: boolean; online: boolean | null; isTest: boolean; evidence: string; observedAt: string }
+export interface Target { source?: string | null; os?: string | null; model?: string | null; location?: string | null; assetIds?: string[] | null; isTest: boolean }
+export interface Change { id: string; title: string; description: string; type: string; ownerId: string; beforeJson: string; afterJson: string; targetJson: string; rollbackPlan: string; rollbackDifficulty: number | null; technicalSensitivity: number | null; factorEvidence: string; successCriteria: string; state: string; version: number; updatedAt: string }
+export interface Finding { ruleId: string; ruleVersion: string; severity: string; explanation: string; mitigation: string; assets: string[]; source: string; confidence: string }
+export interface Result { scenario: string; directCount: number; indirectCount: number; unknownAssetCount: number; coverageConfidence: number; evidenceConfidence: number; dataFreshness: number; minimumScore: number; maximumScore: number; score: number | null; level: string; reviewRequired: boolean; factors: { id: string; name: string; weight: number; value: number | null; evidence: string }[]; findings: Finding[]; impacts: { assetId: string; path: string[]; classification: string }[]; pilot: { assets: string[]; representedStrata: number; totalStrata: number; conditions: string[] } }
+export interface Assessment { id: string; changeVersion: number; createdAt: string; rulesetVersion: string; snapshotHash: string; resultJson: string; snapshotJson?: string }
+export interface Job { id: string; status: string; error?: string; assessmentId?: string }
+export const allowed = (user: User, ...roles: string[]) => roles.some(r => user.roles.includes(r))

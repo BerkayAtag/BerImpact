@@ -1,0 +1,13 @@
+**/bin/
+**/obj/
+**/node_modules/
+**/dist/
+**/TestResults/
+**/playwright-report/
+**/test-results/
+.local/
+.env
+*.user
+*.log
+artifacts/
+src/backend/Api/wwwroot/

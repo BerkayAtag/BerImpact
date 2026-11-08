@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "dependencies": {
+    "net10.0": {
+      "berimpact.domain": {
+        "type": "Project"
+      },
+      "berimpact.sdk": {
+        "type": "Project",
+        "dependencies": {
+          "BerImpact.Domain": "[1.0.0, )"
+        }
+      }
+    }
+  }
+}

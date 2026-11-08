@@ -1,0 +1,53 @@
+name: Verify
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  linux:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17.11
+        env:
+          POSTGRES_USER: berimpact_test
+          POSTGRES_PASSWORD: ephemeral-test-only
+          POSTGRES_DB: postgres
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U berimpact_test"
+          --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      BERIMPACT_TEST_DATABASE: Host=127.0.0.1;Database=postgres;Username=berimpact_test;Password=ephemeral-test-only
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.22.1'
+          cache: npm
+          cache-dependency-path: src/frontend/package-lock.json
+      - run: dotnet restore BerImpact.sln --locked-mode
+      - run: dotnet build BerImpact.sln --no-restore
+      - run: dotnet test BerImpact.sln --no-build --logger trx --results-directory artifacts/ci-tests
+      - run: npm ci && npm run build && npm run lint
+        working-directory: src/frontend
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: linux-tests
+          path: artifacts/ci-tests
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+      - run: dotnet test tests/unit --logger trx --results-directory artifacts/windows-tests
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: windows-unit-tests
+          path: artifacts/windows-tests
