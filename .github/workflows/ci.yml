@@ -46,6 +46,15 @@ jobs:
         with:
           global-json-file: global.json
       - run: dotnet test tests/unit --logger trx --results-directory artifacts/windows-tests
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.22.1'
+      - name: Publish self-contained Windows server
+        shell: pwsh
+        run: ./scripts/Publish-Windows.ps1 -Output 'artifacts/Windows server'
+      - name: Windows service lifecycle smoke
+        shell: pwsh
+        run: ./scripts/Test-WindowsServices.ps1 -Package 'artifacts/Windows server'
       - uses: actions/upload-artifact@v4
         if: always()
         with:

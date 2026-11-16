@@ -27,14 +27,17 @@ public sealed class AnalysisWorker(IServiceScopeFactory scopes, ILogger<Analysis
         AnalysisJob? job;
         await using (var tx = await db.Database.BeginTransactionAsync(ct))
         {
+            // Recover exhausted leases even while other jobs keep the queue busy.
+            await db.Jobs.Where(j => j.Status == "Running" && j.LeaseUntil < DateTime.UtcNow && j.Attempts >= 3)
+                .ExecuteUpdateAsync(s => s.SetProperty(j => j.Status, "Failed")
+                    .SetProperty(j => j.LeaseUntil, (DateTime?)null)
+                    .SetProperty(j => j.Error, "Worker recovery attempts exhausted."), ct);
             var rows = await db.Jobs.FromSqlRaw("""
                 SELECT *, xmin FROM "Jobs" WHERE ("Status" = 'Queued' OR ("Status" = 'Running' AND "LeaseUntil" < now()))
                 AND "Attempts" < 3 ORDER BY "CreatedAt" LIMIT 1 FOR UPDATE SKIP LOCKED
                 """).ToListAsync(ct);
             job = rows.SingleOrDefault();
             if (job == null) {
-                await db.Jobs.Where(j => j.Status == "Running" && j.LeaseUntil < DateTime.UtcNow && j.Attempts >= 3)
-                    .ExecuteUpdateAsync(s => s.SetProperty(j => j.Status, "Failed").SetProperty(j => j.Error, "Worker recovery attempts exhausted."), ct);
                 await tx.CommitAsync(ct); return false;
             }
             job.Status = "Running"; job.LeaseUntil = DateTime.UtcNow.AddMinutes(2); job.LeaseToken = Guid.NewGuid(); job.Attempts++;

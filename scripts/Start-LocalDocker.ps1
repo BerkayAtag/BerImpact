@@ -18,16 +18,16 @@ if (-not $network) { docker --context desktop-linux network create berimpact-dev
 $networks = docker --context desktop-linux inspect berimpact-dev-db --format '{{json .NetworkSettings.Networks}}' | ConvertFrom-Json
 if (-not $networks.'berimpact-dev') { docker --context desktop-linux network connect berimpact-dev berimpact-dev-db }
 if (-not $NoBuild) {
-    docker --context desktop-linux build -f deployment/docker/Dockerfile --target api -t berimpact-api:0.1.1 .
+    docker --context desktop-linux build -f deployment/docker/Dockerfile --target api -t berimpact-api:0.1.2 .
     if ($LASTEXITCODE -ne 0) { throw 'API image build failed.' }
 }
 $passwordPath = (Resolve-Path '.local/db-password').Path
 $common = @('--context','desktop-linux','run','--rm','--network','berimpact-dev','-e','ConnectionStrings__Database=Host=berimpact-dev-db;Database=berimpact;Username=berimpact','-e','DatabasePasswordFile=/run/secrets/db-password','-e','Logging__LogLevel__Default=Warning','--mount',"type=bind,source=$passwordPath,target=/run/secrets/db-password,readonly")
-& docker @common berimpact-api:0.1.1 --migrate true
+& docker @common berimpact-api:0.1.2 --migrate true
 if ($LASTEXITCODE -ne 0) { throw 'Migration failed.' }
 $existing = docker --context desktop-linux ps -a --filter name=^berimpact-dev-api$ --format '{{.Names}}'
 if ($existing) { docker --context desktop-linux rm -f berimpact-dev-api | Out-Null }
-docker --context desktop-linux run -d --name berimpact-dev-api --label app=berimpact-dev --network berimpact-dev -p 127.0.0.1:5080:8080 -e 'ConnectionStrings__Database=Host=berimpact-dev-db;Database=berimpact;Username=berimpact' -e DatabasePasswordFile=/run/secrets/db-password -e ASPNETCORE_ENVIRONMENT=Development -e RunWorker=true -e Logging__LogLevel__Default=Warning --mount "type=bind,source=$passwordPath,target=/run/secrets/db-password,readonly" berimpact-api:0.1.1 | Out-Null
+docker --context desktop-linux run -d --name berimpact-dev-api --label app=berimpact-dev --network berimpact-dev -p 127.0.0.1:5080:8080 -e 'ConnectionStrings__Database=Host=berimpact-dev-db;Database=berimpact;Username=berimpact' -e DatabasePasswordFile=/run/secrets/db-password -e ASPNETCORE_ENVIRONMENT=Development -e RunWorker=true -e Logging__LogLevel__Default=Warning --mount "type=bind,source=$passwordPath,target=/run/secrets/db-password,readonly" berimpact-api:0.1.2 | Out-Null
 if ($LASTEXITCODE -ne 0) { throw 'Development API failed to start.' }
 for ($attempt = 0; $attempt -lt 30; $attempt++) {
     try { $health = Invoke-RestMethod 'http://127.0.0.1:5080/api/v1/health/ready' -TimeoutSec 2; break } catch { Start-Sleep -Seconds 1 }

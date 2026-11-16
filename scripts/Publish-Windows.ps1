@@ -2,11 +2,14 @@ param([string]$Output = 'artifacts/windows-x64')
 $ErrorActionPreference = 'Stop'
 $root = Split-Path $PSScriptRoot -Parent
 Set-Location $root
+. "$PSScriptRoot/Resolve-Dotnet.ps1"
+$dotnet = Resolve-BerImpactDotnet
 $destination = [IO.Path]::GetFullPath((Join-Path $root $Output))
 if (-not $destination.StartsWith($root + [IO.Path]::DirectorySeparatorChar, [StringComparison]::OrdinalIgnoreCase)) { throw 'Output must stay in workspace.' }
-dotnet publish src/backend/Api -c Release -r win-x64 --self-contained true -p:NuGetLockFilePath=obj/packages.publish-win-x64.lock.json -o "$destination/api"
+if (Test-Path -LiteralPath $destination) { throw 'Output already exists. Choose a new empty versioned output to avoid stale binaries or configuration.' }
+& $dotnet publish src/backend/Api -c Release -r win-x64 --self-contained true -p:NuGetLockFilePath=obj/packages.publish-win-x64.lock.json -o "$destination/api"
 if ($LASTEXITCODE -ne 0) { throw 'API publish failed.' }
-dotnet publish src/backend/Workers -c Release -r win-x64 --self-contained true -p:NuGetLockFilePath=obj/packages.publish-win-x64.lock.json -o "$destination/worker"
+& $dotnet publish src/backend/Workers -c Release -r win-x64 --self-contained true -p:NuGetLockFilePath=obj/packages.publish-win-x64.lock.json -o "$destination/worker"
 if ($LASTEXITCODE -ne 0) { throw 'Worker publish failed.' }
 Push-Location src/frontend
 npm ci

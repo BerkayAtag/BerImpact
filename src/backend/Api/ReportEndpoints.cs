@@ -19,7 +19,8 @@ public static class ReportEndpoints
                 string Cell(string value) => "\"" + ((value.Length > 0 && "=+-@\t\r\n".Contains(value[0])) ? "'" + value : value).Replace("\"", "\"\"") + "\"";
                 var lines = new List<string> { "Scenario,MinimumScore,MaximumScore,Direct,Indirect,Unknown,SnapshotHash,RulesetVersion" };
                 lines.AddRange(results.Select(r => string.Join(',', new[] { r.Scenario, r.MinimumScore.ToString(System.Globalization.CultureInfo.InvariantCulture), r.MaximumScore.ToString(System.Globalization.CultureInfo.InvariantCulture), r.DirectCount.ToString(), r.IndirectCount.ToString(), r.UnknownAssetCount.ToString(), a.SnapshotHash, a.RulesetVersion }.Select(Cell))));
-                return Results.File(Encoding.UTF8.GetBytes(string.Join("\r\n", lines)), "text/csv; charset=utf-8", $"berimpact-{id}.csv");
+                // Excel on Windows requires a BOM to reliably detect Turkish UTF-8 text.
+                return Results.File([.. Encoding.UTF8.GetPreamble(), .. Encoding.UTF8.GetBytes(string.Join("\r\n", lines))], "text/csv; charset=utf-8", $"berimpact-{id}.csv");
             }
             if (format != "html") return Results.BadRequest(new { detail = "Supported formats: json, csv, html." });
             string E(string s) => HtmlEncoder.Default.Encode(s);

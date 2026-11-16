@@ -18,7 +18,7 @@ services:
       retries: 10
     networks: [backend]
   migrate:
-    image: berimpact-api:0.1.1
+    image: berimpact-api:0.1.2
     build: { context: ../.., dockerfile: deployment/docker/Dockerfile, target: api }
     command: ["--migrate", "true"]
     environment:
@@ -29,7 +29,7 @@ services:
     depends_on: { postgres: { condition: service_healthy } }
     networks: [backend]
   api:
-    image: berimpact-api:0.1.1
+    image: berimpact-api:0.1.2
     restart: unless-stopped
     environment:
       ConnectionStrings__Database: Host=postgres;Database=berimpact;Username=berimpact_runtime
@@ -47,7 +47,7 @@ services:
     tmpfs: [/tmp]
     security_opt: [no-new-privileges:true]
   worker:
-    image: berimpact-worker:0.1.1
+    image: berimpact-worker:0.1.2
     build: { context: ../.., dockerfile: deployment/docker/Dockerfile, target: worker }
     restart: unless-stopped
     environment:

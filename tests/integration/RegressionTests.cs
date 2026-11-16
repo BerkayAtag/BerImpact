@@ -1,4 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.EntityFrameworkCore;
 using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
@@ -65,7 +66,30 @@ public sealed class RegressionTests(PlatformFixture fixture) : IClassFixture<Pla
         Assert.True(await worker.RunOneAsync(default));
         var status = await c.GetFromJsonAsync<JsonElement>($"/api/v1/jobs/{job!.Id}"); var assessment = status.GetProperty("assessmentId").GetGuid();
         var html = await c.GetStringAsync($"/api/v1/reports/{assessment}?format=html"); Assert.DoesNotContain("<script>", html); Assert.Contains("&lt;script&gt;", html);
-        var csv = await c.GetStringAsync($"/api/v1/reports/{assessment}?format=csv"); Assert.Contains("'=DANGEROUS()", csv);
+        var csvBytes = await c.GetByteArrayAsync($"/api/v1/reports/{assessment}?format=csv");
+        Assert.Equal(new byte[] { 0xef, 0xbb, 0xbf }, csvBytes.Take(3).ToArray());
+        var csv = System.Text.Encoding.UTF8.GetString(csvBytes); Assert.Contains("'=DANGEROUS()", csv);
         Assert.Equal(HttpStatusCode.BadRequest, (await c.GetAsync($"/api/v1/reports/{assessment}?format=exe")).StatusCode);
+    }
+
+    [Fact] public async Task Exhausted_worker_lease_is_recovered_while_queue_is_busy() {
+        using var c = await fixture.Login("manager"); var id = Guid.NewGuid();
+        var body = new { id, title = "Lease recovery", description = "Test", type = "Custom", before = new {}, after = new {}, target = new TargetFilter(IsTest: true), rollbackPlan = "Restore", successCriteria = "Healthy", factorEvidence = "" };
+        Assert.Equal(HttpStatusCode.Created, (await Post(c, "/changes", body)).StatusCode);
+        var first = await Post(c, $"/changes/{id}/assessments", new { scenarios = Array.Empty<Scenario>() });
+        var exhausted = (await first.Content.ReadFromJsonAsync<AnalysisJob>(Json.Options))!;
+        using (var scope = fixture.Factory.Services.CreateScope()) {
+            var db = scope.ServiceProvider.GetRequiredService<PlatformDb>();
+            await db.Jobs.Where(j => j.Id == exhausted.Id).ExecuteUpdateAsync(s => s
+                .SetProperty(j => j.Status, "Running").SetProperty(j => j.Attempts, 3)
+                .SetProperty(j => j.LeaseUntil, DateTime.UtcNow.AddMinutes(-1)));
+        }
+        Assert.Equal(HttpStatusCode.Accepted, (await Post(c, $"/changes/{id}/assessments", new { scenarios = Array.Empty<Scenario>() })).StatusCode);
+        var worker = new AnalysisWorker(fixture.Factory.Services.GetRequiredService<IServiceScopeFactory>(), Microsoft.Extensions.Logging.Abstractions.NullLogger<AnalysisWorker>.Instance);
+        Assert.True(await worker.RunOneAsync(default));
+        using var check = fixture.Factory.Services.CreateScope();
+        var recovered = await check.ServiceProvider.GetRequiredService<PlatformDb>().Jobs.SingleAsync(j => j.Id == exhausted.Id);
+        Assert.Equal("Failed", recovered.Status); Assert.Null(recovered.LeaseUntil);
+        Assert.Contains("exhausted", recovered.Error);
     }
 }
