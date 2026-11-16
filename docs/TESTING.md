@@ -1,4 +1,17 @@
-# Verification — 2026-11-08
+# Verification
+
+## 0.1.2 — 2026-11-17
+
+- Native Windows: 29 unit/connector tests and 10 real PostgreSQL integration tests passed, with no skips. Recovery of exhausted worker leases under queue load and UTF-8 BOM/formula escaping are covered.
+- Frontend production build and lint passed; npm audit reported no vulnerabilities in the locked dependencies.
+- GitHub [Verify run](https://github.com/BerkayAtag/BerImpact/actions/runs/43966546680) passed on Linux and Windows. Windows additionally publishes self-contained API/worker binaries and exercises SCM registration, start, liveness, database-unavailable readiness, restart, stop and unregister from a path containing spaces.
+- Playwright on native Windows at `http://127.0.0.1:5080`, 1440×1000 and 390×844: login, test JSON import, inventory lookup, draft creation/edit, analysis completion, CSV download, historical-version notice, scenario comparison, light/dark theme and expired-session re-login passed. No page exceptions, relevant console errors, blank screen, framework overlay or mobile horizontal overflow were observed. A separate 26-draft scenario verified simulation page 2 selection and selection reset on page changes.
+- Local Windows self-contained publishing passed. An additional local launch of separate packaged processes was blocked by automatic tool approval; CI package/service evidence above is separate from the native development-process browser tests.
+- Site changes preserve the existing HTML structure, CSS, JavaScript, fonts and screenshots; only release links and verification text change.
+
+Evidence is scoped to these scenarios. Production service identities, institutional TLS/AD/GPO/EDR, disconnected-host installation, HA, large-scale load and disaster recovery still require environment acceptance. No Windows security protection was disabled. Earlier limitations below are historical evidence, not a claim that the current native test run failed.
+
+## Historical verification — 2026-11-08
 
 This is development-release evidence, not enterprise production certification.
 

@@ -18,13 +18,14 @@ if ($IsWindows -or $env:OS -eq 'Windows_NT') {
     $identity = [System.Security.Principal.WindowsIdentity]::GetCurrent().Name
     & icacls $local /inheritance:r /grant:r "${identity}:(OI)(CI)F" 'SYSTEM:(OI)(CI)F' | Out-Null
 }
+$container = & docker --context desktop-linux ps -a --filter name=^berimpact-dev-db$ --format '{{.Names}}'
+if ($LASTEXITCODE -ne 0) { throw 'Docker Linux engine is unavailable.' }
+if ($container -and -not (Test-Path "$local/db-password")) { throw 'Existing development database has no matching local password file. Restore .local/db-password; database credentials and volumes were not changed.' }
 if (-not (Test-Path "$local/db-password")) {
     $password = New-RandomHex 24
     [IO.File]::WriteAllText("$local/db-password", $password)
     [IO.File]::WriteAllText("$local/database.env", "POSTGRES_PASSWORD=$password")
 }
-$container = & docker --context desktop-linux ps -a --filter name=^berimpact-dev-db$ --format '{{.Names}}'
-if ($LASTEXITCODE -ne 0) { throw 'Docker Linux engine is unavailable.' }
 if (-not $container) {
     & docker --context desktop-linux run -d --name berimpact-dev-db --label app=berimpact-dev --env-file "$local/database.env" -e POSTGRES_USER=berimpact -e POSTGRES_DB=berimpact -p 127.0.0.1:55432:5432 -v berimpact-dev-data:/var/lib/postgresql/data postgres:17.11 | Out-Null
 } else { & docker --context desktop-linux start berimpact-dev-db | Out-Null }

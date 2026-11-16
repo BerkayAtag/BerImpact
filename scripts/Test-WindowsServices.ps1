@@ -1,3 +1,4 @@
+#Requires -Version 7.0
 param([Parameter(Mandatory=$true)][string]$Package)
 $ErrorActionPreference = 'Stop'
 $packagePath = (Resolve-Path -LiteralPath $Package).Path

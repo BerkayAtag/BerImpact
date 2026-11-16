@@ -10,7 +10,7 @@ Offline release acceptance must test a fresh disconnected host: database initial
 
 ## Downloaded Linux release bundle
 
-Extract `berimpact-0.1.1-linux-offline.tar.gz` into an empty directory. Validate the archive against the release `SHA256SUMS.txt` first. The archive contains images, Compose configuration, documentation and an internal manifest; it contains no credentials or certificates.
+Extract `berimpact-0.1.2-linux-offline.tar.gz` into an empty directory. Validate the archive against the release `SHA256SUMS.txt` first. The archive contains images, Compose configuration, documentation and an internal manifest; it contains no credentials or certificates.
 
 ```sh
 docker load -i berimpact-images.tar

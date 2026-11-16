@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.1.2 — 2026-11-17
+
+- Fixed Windows development startup with quoted paths and SDK discovery honoring global.json and DOTNET_ROOT.
+- Fail early when Docker/PostgreSQL is unavailable; refuse reused Windows publish directories to prevent stale package contents.
+- Recover exhausted analysis leases even when the queue remains busy.
+- Refresh CSRF before login so expired sessions can sign in again without reloading the application.
+- Add simulation pagination, show retained explicit asset scope and prevent editing test/live classification.
+- Export UTF-8 CSV with a BOM for Windows Excel while retaining formula-injection escaping.
+- Add PostgreSQL recovery/CSV regressions and Windows CI self-contained publishing plus SCM lifecycle smoke checks.
+- Retain Observe Mode and ruleset 1.2.0; no database migration or design-template change is required.
+
 ## 0.1.1 — 2026-11-08
 
 - Fixed atomic import validation and conflicting observations at PostgreSQL timestamp precision.
